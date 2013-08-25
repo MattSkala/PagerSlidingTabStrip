@@ -89,6 +89,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
 	private int tabTextSize = 12;
 	private int tabTextColor = 0xFF666666;
+	private int tabTextColorSelected = tabTextColor;
 	private Typeface tabTypeface = null;
 	private int tabTypefaceStyle = Typeface.BOLD;
 
@@ -151,6 +152,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 		shouldExpand = a.getBoolean(R.styleable.PagerSlidingTabStrip_shouldExpand, shouldExpand);
 		scrollOffset = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_scrollOffset, scrollOffset);
 		textAllCaps = a.getBoolean(R.styleable.PagerSlidingTabStrip_textAllCaps, textAllCaps);
+		tabTextColorSelected = a.getColor(R.styleable.PagerSlidingTabStrip_selectedTextColor, tabTextColorSelected);
 
 		a.recycle();
 
@@ -224,6 +226,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 			}
 		});
 
+		setCurrentItem(currentPosition);
+
 	}
 
 	private void addTextTab(final int position, String title) {
@@ -243,6 +247,15 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
 		tabsContainer.addView(tab);
 
+	}
+
+	private void setCurrentItem(int position) {
+		for (int i = 0; i < tabsContainer.getChildCount(); i++) {
+			TextView view = (TextView) tabsContainer.getChildAt(i);
+			boolean current = (i == position);
+			view.setTextColor(current ? tabTextColorSelected : tabTextColor);
+			view.setSelected(current);
+		}
 	}
 
 	private void addIconTab(final int position, int resId) {
@@ -418,6 +431,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
 		@Override
 		public void onPageSelected(int position) {
+			setCurrentItem(position);
+
 			if (delegatePageListener != null) {
 				delegatePageListener.onPageSelected(position);
 			}
