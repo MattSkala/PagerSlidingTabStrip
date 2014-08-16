@@ -19,8 +19,13 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 20
+    compileSdkVersion Integer.parseInt(project.ANDROID_BUILD_SDK_VERSION)
     buildToolsVersion '20.0.0'
+
+    defaultConfig {
+        minSdkVersion 8
+        targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
+    }
 
     sourceSets {
         main {
@@ -30,3 +35,5 @@ android {
         }
     }
 }
+
+apply from: 'https://raw.github.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
