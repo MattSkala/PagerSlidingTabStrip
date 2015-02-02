@@ -12,6 +12,7 @@
         <attr name="pstsScrollOffset" format="dimension" />
         <attr name="pstsTabBackground" format="reference" />
         <attr name="pstsShouldExpand" format="boolean" />
+        <attr name="pstsShouldFit" format="boolean" />
         <attr name="pstsTextAllCaps" format="boolean" />
         <attr name="pstsSelectedTextColor" format="color" />
         <attr name="pstsTextStyle" format="enum">

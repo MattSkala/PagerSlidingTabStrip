@@ -30,7 +30,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -60,6 +59,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
 	private LinearLayout.LayoutParams defaultTabLayoutParams;
 	private LinearLayout.LayoutParams expandedTabLayoutParams;
+    private LinearLayout.LayoutParams fitTabLayoutParams;
 
 	private final PageListener pageListener = new PageListener();
 	public OnPageChangeListener delegatePageListener;
@@ -81,6 +81,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 	private int dividerColor = 0x1A000000;
 
 	private boolean shouldExpand = false;
+    private boolean shouldFit = false;
 	private boolean textAllCaps = true;
 
 	private int scrollOffset = 52;
@@ -153,6 +154,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 		tabPadding = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsTabPaddingLeftRight, tabPadding);
 		tabBackgroundResId = a.getResourceId(R.styleable.PagerSlidingTabStrip_pstsTabBackground, tabBackgroundResId);
 		shouldExpand = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsShouldExpand, shouldExpand);
+        shouldFit = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsShouldFit, shouldFit);
 		scrollOffset = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsScrollOffset, scrollOffset);
 		textAllCaps = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsTextAllCaps, textAllCaps);
 		tabTextColorSelected = a.getColor(R.styleable.PagerSlidingTabStrip_pstsSelectedTextColor, tabTextColor);
@@ -170,6 +172,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
 		defaultTabLayoutParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
 		expandedTabLayoutParams = new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1.0f);
+        fitTabLayoutParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT, 1.0f);
 
 		if (locale == null) {
 			locale = getResources().getConfiguration().locale;
@@ -278,7 +281,16 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 		});
 
 		tab.setPadding(tabPadding, 0, tabPadding, 0);
-		tabsContainer.addView(tab, position, shouldExpand ? expandedTabLayoutParams : defaultTabLayoutParams);
+
+        LinearLayout.LayoutParams params;
+        if (shouldFit) {
+            params = fitTabLayoutParams;
+        } else if (shouldExpand) {
+            params = expandedTabLayoutParams;
+        } else {
+            params = defaultTabLayoutParams;
+        }
+		tabsContainer.addView(tab, position, params);
 	}
 
 	private void updateTabStyles() {
@@ -500,6 +512,15 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 	public boolean getShouldExpand() {
 		return shouldExpand;
 	}
+
+    public void setShouldFit(boolean shouldFit) {
+        this.shouldFit = shouldFit;
+        requestLayout();
+    }
+
+    public boolean getShouldFit() {
+        return shouldFit;
+    }
 
 	public boolean isTextAllCaps() {
 		return textAllCaps;
