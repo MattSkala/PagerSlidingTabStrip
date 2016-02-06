@@ -83,6 +83,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 	private boolean shouldExpand = false;
     private boolean shouldFit = false;
 	private boolean textAllCaps = true;
+	private boolean smoothScroll = true;
 
 	private int scrollOffset = 52;
 	private int indicatorHeight = 8;
@@ -159,6 +160,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 		textAllCaps = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsTextAllCaps, textAllCaps);
 		tabTextColorSelected = a.getColor(R.styleable.PagerSlidingTabStrip_pstsSelectedTextColor, tabTextColor);
 		tabTypefaceStyle = a.getInt(R.styleable.PagerSlidingTabStrip_pstsTextStyle, tabTypefaceStyle);
+		smoothScroll = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsSmoothScroll, smoothScroll);
 
 		a.recycle();
 
@@ -276,7 +278,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                     tabClickListener.onClick(position);
                 }
 
-				pager.setCurrentItem(position);
+				pager.setCurrentItem(position, smoothScroll);
 			}
 		});
 
